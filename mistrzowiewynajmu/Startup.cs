@@ -5,8 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MistrzowieWynajmu.Models.Database;
+using MistrzowieWynajmu.Models.Interfaces;
+using MistrzowieWynajmu.Models.Repositories;
 
 namespace mistrzowiewynajmu
 {
@@ -23,6 +27,11 @@ namespace mistrzowiewynajmu
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            var dbConnectionString = @"Server=(localdb)\MSSQLLocalDB;Database=MistrzowieWynajmu;Trusted_Connection=True;MultipleActiveResultSets=true";
+            services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(dbConnectionString));
+
+            services.AddScoped<IPropertyRepository, PropertyRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
